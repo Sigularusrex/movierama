@@ -2,7 +2,7 @@
   email:  john@example.com
   uid:  'null|johnmcfoo'
 - name: Alice Wallace
-  email:  djsigley@gmail.com
+  email:  alice@example.com
   uid:  'null|alice'
 - name: Bob Ablleton
   email: bob@example.com
@@ -10,4 +10,3 @@
 - name: Charlie O'Callaghan
   email: charlie@example.com
   uid:  'null|charlie'
-
