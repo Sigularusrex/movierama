@@ -1,0 +1,10 @@
+%p
+  = "#{@voter.name} has #{@action}d your movie: #{@movie.title}"
+%p
+  Current score:
+%p
+  Likes:
+  = @movie.liker_count
+%p
+  Hates:
+  = @movie.hater_count

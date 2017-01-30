@@ -66,6 +66,19 @@ If not, you'll need to get your own OAuth tokens from Github and edit
 `.env` appropriately.
 
 
+#### Getting emails to work
+Email notifications are available in the development environment
+
+Edit '.env' to include valid Gmail credentials
+
+Email notifications use Sidkiq for asynchronous sending:
+
+Run Sidekiq
+
+    $ bundle exec sidekiq
+
+Note: Make sure you have an instance of Redis running locally
+
 
 ### Screenshot
 

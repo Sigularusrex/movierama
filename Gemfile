@@ -52,6 +52,9 @@ gem 'omniauth' # Authentication
 gem 'omniauth-github'
 gem 'cancan'   # Authorisation
 
+# Asynch emails
+gem 'sidekiq'
+
 
 # Debugger
 gem 'pry'
