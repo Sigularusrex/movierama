@@ -9,15 +9,26 @@ RSpec.describe 'vote on movies', type: :feature do
   let(:page) { Pages::MovieList.new }
 
   before do
-    author = User.create(
-      uid:  'null|12345',
-      name: 'Bob'
+    author1 = User.create(
+      uid:   'null|12345',
+      name:  'Bob',
+      email: 'bob@example.com'
     )
     Movie.create(
       title:        'Empire strikes back',
       description:  'Who\'s scruffy-looking?',
       date:         '1980-05-21',
-      user:         author
+      user:         author1
+    )
+    author2 = User.create(
+        uid:   'null|12345',
+        name:  'Bobby'
+    )
+    Movie.create(
+        title:        'Return of the Jedi',
+        description:  'Description for ROTJ',
+        date:         '1980-05-21',
+        user:         author2
     )
   end
 
