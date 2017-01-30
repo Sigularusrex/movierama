@@ -3,12 +3,16 @@ require 'capybara/rails'
 require 'support/pages/movie_list'
 require 'support/pages/movie_new'
 require 'support/with_user'
+require 'sidekiq/testing'
 
 RSpec.describe 'vote on movies', type: :feature do
 
   let(:page) { Pages::MovieList.new }
 
   before do
+    # clear all jobs from worker
+    NotificationWorker.drain
+
     author1 = User.create(
       uid:   'null|12345',
       name:  'Bob',
@@ -21,7 +25,7 @@ RSpec.describe 'vote on movies', type: :feature do
       user:         author1
     )
     author2 = User.create(
-        uid:   'null|12345',
+        uid:   'null|22345',
         name:  'Bobby'
     )
     Movie.create(
@@ -48,23 +52,35 @@ RSpec.describe 'vote on movies', type: :feature do
 
     it 'can like' do
       page.like('Empire strikes back')
+
+      notification_queue(1)
       expect(page).to have_vote_message
     end
 
     it 'can hate' do
       page.hate('Empire strikes back')
+
+      notification_queue(1)
       expect(page).to have_vote_message
     end
 
     it 'can unlike' do
       page.like('Empire strikes back')
+      notification_queue(1)
+
       page.unlike('Empire strikes back')
+      notification_queue(0)
+
       expect(page).to have_unvote_message
     end
 
     it 'can unhate' do
       page.hate('Empire strikes back')
+      notification_queue(1)
+
       page.unhate('Empire strikes back')
+      notification_queue(0)
+
       expect(page).to have_unvote_message
     end
 
@@ -84,6 +100,18 @@ RSpec.describe 'vote on movies', type: :feature do
         page.like('The Party')
       }.to raise_error(Capybara::ElementNotFound)
     end
+
+    it 'cannot notify without email' do
+        page.like('Return of the Jedi')
+
+        notification_queue(0)
+        expect(page).to have_vote_message
+    end
+  end
+
+  def notification_queue(should_equal)
+    assert_equal should_equal, NotificationWorker.jobs.size
+    NotificationWorker.drain
   end
 
 end

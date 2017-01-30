@@ -36,8 +36,8 @@ class VotesController < ApplicationController
   # Sends an vote notification email to user
   def _notify_vote(voter, movie, action)
     # Check user has subscribed to notifications and has an email address
-    if !movie.user.email.empty?
-      NotificationMailer.delay.new_vote(voter, movie, action)
+    if !movie.user.email.blank?
+      NotificationWorker.perform_async(voter.name, movie.user.email, movie.title, action)
     end
   end
 
